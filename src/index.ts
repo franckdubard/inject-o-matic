@@ -1,5 +1,7 @@
 import { createApp } from './app'
+import { env, loadEnv } from './env'
+
+loadEnv()
 
 const app = createApp()
-
-app.listen(3000)
+app.listen({ port: env.PORT })

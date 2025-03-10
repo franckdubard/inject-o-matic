@@ -1,56 +1,31 @@
-import * as cheerio from 'cheerio'
-import { Elysia, t } from 'elysia'
-import { swagger } from '@elysiajs/swagger'
+import Elysia from 'elysia'
+import swagger from '@elysiajs/swagger'
+import routes from './app.routes'
 
 export function createApp() {
-    const app = new Elysia().use(swagger()).post(
-        '/api/rest/1/inject',
-        async ({ headers, body: { url, scripts } }) => {
-            const response = await fetch(url)
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`)
-            }
-            let html = await response.text()
-            const $ = cheerio.load(html)
-            if ($('head').length === 0) {
-                html = new HTMLRewriter()
-                    .on('html', {
-                        element(html) {
-                            html.prepend(`<head></head>`, { html: true })
+    const app = new Elysia()
+        .use(
+            swagger({
+                exclude: ['/swagger'],
+                autoDarkMode: true,
+                documentation: {
+                    info: {
+                        title: 'Inject-O-Matic',
+                        description: 'API to inject scripts into HTML pages',
+                        version: '1.0.0',
+                        license: {
+                            name: 'MIT',
+                            url: 'https://opensource.org/license/mit',
                         },
-                    })
-                    .transform(html)
-            }
-            html = new HTMLRewriter()
-                .on('head', {
-                    element(head) {
-                        scripts.forEach(({ src, async = true, defer = false }) => {
-                            const attrs = []
-                            if (async) attrs.push('async')
-                            if (defer) attrs.push('defer')
-                            head.append(`<script src="${src}" ${attrs.join(' ')}/>`, { html: true })
-                        })
+                        contact: {
+                            name: 'Franck DUBARD',
+                            url: 'https://github.com/franckdubard',
+                        },
                     },
-                })
-                .transform(html)
-            return new Response(html, { headers: { ...headers, 'content-type': 'text/html' } })
-        },
-        {
-            body: t.Object({
-                url: t.String(),
-                scripts: t.Array(
-                    t.Object({
-                        src: t.String(),
-                        async: t.Optional(t.Boolean({ default: true })),
-                        defer: t.Optional(t.Boolean({ default: false })),
-                    }),
-                    {
-                        minItems: 1,
-                    },
-                ),
+                },
             }),
-        },
-    )
+        )
+        .use(routes())
     return app
 }
 

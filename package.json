@@ -2,6 +2,9 @@
     "name": "@franckdubard/inject-o-matic",
     "module": "src/index.ts",
     "type": "module",
+    "version": "1.0.0",
+    "license": "MIT",
+    "description": "A microservice for injecting HTML scripts dynamically",
     "devDependencies": {
         "@types/bun": "^1.2.4",
         "eslint": "^9.22.0",
@@ -17,7 +20,8 @@
     "dependencies": {
         "@elysiajs/swagger": "^1.2.2",
         "cheerio": "^1.0.0",
-        "elysia": "^1.2.25"
+        "elysia": "^1.2.25",
+        "ts-dotenv": "^0.9.1"
     },
     "scripts": {
         "prepare": "node .husky/install.mjs",

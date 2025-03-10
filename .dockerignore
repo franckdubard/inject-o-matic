@@ -2,6 +2,9 @@
 !.husky/install.mjs
 dist/
 node_modules/
+.env
+.env.*
+!.env.example
 .prettierignore
 .prettierrc
 eslint.config.mjs
