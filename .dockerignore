@@ -1,0 +1,8 @@
+.husky/
+!.husky/install.mjs
+dist/
+node_modules/
+.prettierignore
+.prettierrc
+eslint.config.mjs
+README.md
