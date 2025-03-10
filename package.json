@@ -1,11 +1,39 @@
 {
-  "name": "@franckdubard/inject-o-matic",
-  "module": "src/index.ts",
-  "type": "module",
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+    "name": "@franckdubard/inject-o-matic",
+    "module": "src/index.ts",
+    "type": "module",
+    "devDependencies": {
+        "@types/bun": "^1.2.4",
+        "eslint": "^9.22.0",
+        "eslint-config-prettier": "^10.1.1",
+        "eslint-plugin-prettier": "^5.2.3",
+        "husky": "^9.1.7",
+        "lint-staged": "^15.4.3",
+        "prettier": "3.5.3"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@elysiajs/swagger": "^1.2.2",
+        "cheerio": "^1.0.0",
+        "elysia": "^1.2.25"
+    },
+    "scripts": {
+        "prepare": "node .husky/install.mjs",
+        "preinstall": "npx only-allow bun",
+        "dev": "bun --watch src/index.ts",
+        "build": "bun build src/index.ts --target bun --outdir ./dist",
+        "start": "NODE_ENV=production bun dist/index.js",
+        "test": "bun test",
+        "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,scss}\"",
+        "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css,scss}\"",
+        "lint": "eslint --fix .",
+        "pre-commit": "bun lint-staged && bun test"
+    },
+    "lint-staged": {
+        "**/*.{ts,js,json,css,scss,html,md}": [
+            "prettier --write"
+        ]
+    }
 }
